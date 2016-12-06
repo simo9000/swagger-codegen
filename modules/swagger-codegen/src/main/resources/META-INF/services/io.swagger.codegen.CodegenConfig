@@ -4,6 +4,7 @@ io.swagger.codegen.languages.AspNetCoreServerCodegen
 io.swagger.codegen.languages.AsyncScalaClientCodegen
 io.swagger.codegen.languages.ConfluenceWikiGenerator
 io.swagger.codegen.languages.CSharpClientCodegen
+io.swagger.codegen.languages.CSharpConsolaClientCodegen
 io.swagger.codegen.languages.CppRestClientCodegen
 io.swagger.codegen.languages.DartClientCodegen
 io.swagger.codegen.languages.FlashClientCodegen
