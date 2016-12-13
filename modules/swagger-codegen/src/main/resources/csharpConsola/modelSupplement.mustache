@@ -1,0 +1,10 @@
+using Consola.Library;
+
+namespace {{packageName}}.{{modelPackage}}
+{
+  {{#models}}
+  {{#model}}
+  public partial class {{classname}} : Scriptable { }
+  {{/model}}
+  {{/models}}
+}

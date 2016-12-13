@@ -1,0 +1,18 @@
+using Consola.Library;
+using RestSharp;
+
+namespace IO.Swagger.Client
+{
+    public partial class ApiClient : Scriptable
+    {
+        partial void InterceptDeserialization(ref object rawObject)
+        {
+            initialize((Scriptable)rawObject);
+        }
+
+        partial void InterceptRequest(IRestRequest request)
+        {
+            request.UseDefaultCredentials = true;
+        }
+    }
+}

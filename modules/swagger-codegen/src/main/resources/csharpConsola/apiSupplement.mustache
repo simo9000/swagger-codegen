@@ -1,0 +1,72 @@
+using Consola.Library;
+using Consola.Library.util;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace {{packageName}}.{{apiPackage}}
+{
+  public abstract class apiProxy: Scriptable
+  {
+    [Hidden]
+    public virtual Configuration Configuration { get; set; }
+    [Hidden]
+    public virtual ExceptionFactory ExceptionFactory { get; set; }
+    private ExceptionFactory _exceptionFactory;
+    [Hidden]
+    public virtual string GetBasePath() { return string.Empty; }
+    [Hidden]
+    public virtual void SetBasePath() { }
+    [Hidden]
+    public virtual Dictionary<String,String> DefaultHeader() { return null; }
+    [Hidden]
+    public virtual void AddDefaultHeader(string key, string value) { }
+
+    protected Configuration createConfig()
+    {
+      Configuration config = Configuration.Default;
+      initialize(config.ApiClient);
+      _exceptionFactory = Configuration.DefaultExceptionFactory;
+      if (config.ApiClient.Configuration == null)
+      {
+        config.ApiClient.Configuration = config;
+      }
+      return config;
+    }
+
+    {{#apiInfo}}
+    {{#apis}}
+    {{#operations}}
+    {{#operation}}
+    [Hidden]
+    public virtual ApiResponse<{{#returnType}} {{{returnType}}} {{/returnType}}{{^returnType}}Object{{/returnType}}> {{operationId}}WithHttpInfo ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) { return null; }
+    [Hidden]
+    public virtual Task<ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Object{{/returnType}}>> {{operationId}}AsyncWithHttpInfo ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) { return null; }
+    [Hidden]
+    public virtual Task{{#returnType}}<{{{returnType}}}>{{/returnType}} {{operationId}}Async ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) { return null; }
+
+    public void {{operationId}}Async ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Action{{#returnType}}<{{{returnType}}}>{{/returnType}} callBack)
+    {
+
+    }
+    {{/operation}}
+    {{/operations}}
+    {{/apis}}
+    {{/apiInfo}}
+
+  }
+
+  {{#apiInfo}}
+  {{#apis}}
+  public partial class {{classname}} : apiProxy
+  {
+    public {{classname}}(ScriptSession session)
+    {
+        Configuration = createConfig();
+    }
+  }
+  {{/apis}}
+  {{/apiInfo}}
+}
