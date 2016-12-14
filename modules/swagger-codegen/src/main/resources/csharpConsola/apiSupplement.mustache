@@ -46,11 +46,6 @@ namespace {{packageName}}.{{apiPackage}}
     public virtual Task<ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Object{{/returnType}}>> {{operationId}}AsyncWithHttpInfo ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) { return null; }
     [Hidden]
     public virtual Task{{#returnType}}<{{{returnType}}}>{{/returnType}} {{operationId}}Async ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) { return null; }
-
-    public void {{operationId}}Async ({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{#optionalMethodArgument}} = null{{/optionalMethodArgument}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Action{{#returnType}}<{{{returnType}}}>{{/returnType}} callBack)
-    {
-
-    }
     {{/operation}}
     {{/operations}}
     {{/apis}}

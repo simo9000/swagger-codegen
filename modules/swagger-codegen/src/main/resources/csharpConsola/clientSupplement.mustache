@@ -1,5 +1,8 @@
 using Consola.Library;
 using RestSharp;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace IO.Swagger.Client
 {
@@ -7,7 +10,12 @@ namespace IO.Swagger.Client
     {
         partial void InterceptDeserialization(ref object rawObject)
         {
+          Type T = rawObject.GetType();
+          if (T.IsAssignableFrom(typeof(Scriptable)))
             initialize((Scriptable)rawObject);
+          else if (T.IsGenericType && T.GetGenericTypeDefinition() == typeof(List<>))
+                foreach (object o in (IEnumerable)rawObject)
+                    initialize((Scriptable)o);
         }
 
         partial void InterceptRequest(IRestRequest request)

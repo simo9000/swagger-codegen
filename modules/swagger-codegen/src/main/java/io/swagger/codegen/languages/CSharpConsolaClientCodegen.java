@@ -10,6 +10,7 @@ public class CSharpConsolaClientCodegen extends CSharpClientCodegen {
     private ArrayList childTemplates;
 
     public CSharpConsolaClientCodegen() {
+      super();
       embeddedTemplateDir = templateDir = "csharp";
       childTemplates = new ArrayList();
       childTemplates.add("packageSupplement.mustache");
@@ -17,6 +18,7 @@ public class CSharpConsolaClientCodegen extends CSharpClientCodegen {
       childTemplates.add("clientSupplement.mustache");
       childTemplates.add("modelSupplement.mustache");
       childTemplates.add("referenceSupplement.mustache");
+
     }
 
     @Override
