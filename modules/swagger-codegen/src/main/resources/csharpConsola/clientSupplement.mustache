@@ -3,24 +3,51 @@ using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace IO.Swagger.Client
 {
     public partial class ApiClient : Scriptable
     {
+        public static Action<IRestRequest> RequestHandler;
+
         partial void InterceptDeserialization(ref object rawObject)
         {
           Type T = rawObject.GetType();
-          if (T.IsAssignableFrom(typeof(Scriptable)))
-            initialize((Scriptable)rawObject);
-          else if (T.IsGenericType && T.GetGenericTypeDefinition() == typeof(List<>))
+            if (typeof(Scriptable).IsAssignableFrom(T))
+            {
+                initialize((Scriptable)rawObject);
+                IEnumerable<PropertyInfo> properties = T.GetProperties().Where(p => {
+                    Type pType = p.PropertyType;
+                    return typeof(Scriptable).IsAssignableFrom(pType) && !pType.IsInterface;
+                });
+                foreach (PropertyInfo PI in properties)
+                {
+                    object propVal = PI.GetValue(rawObject);
+                    if (propVal != null)
+                    {
+                        InterceptDeserialization(ref propVal);
+                        PI.SetValue(rawObject, propVal);
+                    }
+                }
+
+            }
+            else if (T.IsGenericType && T.GetGenericTypeDefinition() == typeof(List<>))
                 foreach (object o in (IEnumerable)rawObject)
-                    initialize((Scriptable)o);
+                {
+                    object current = o;
+                    InterceptDeserialization(ref current);
+                }
         }
 
         partial void InterceptRequest(IRestRequest request)
         {
-            request.UseDefaultCredentials = true;
+            RequestHandler(request);
         }
+
+        public static Action<IRestRequest> RequestHandler = new Action<IRestRequest>(defaultRequestHander);
+
+        private static void defaultRequestHander(IRestRequest request) { }
     }
 }
